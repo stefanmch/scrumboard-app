@@ -1,5 +1,8 @@
+import { useDroppable } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Column } from '@/types';
 import { StoryCard } from '@/components/story/StoryCard';
+import { DraggableStoryCard } from './DraggableStoryCard';
 import { Plus } from 'lucide-react';
 
 interface BoardColumnProps {
@@ -9,29 +12,54 @@ interface BoardColumnProps {
 }
 
 export function BoardColumn({ column, onAddStory, onEditStory }: BoardColumnProps) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: column.id,
+  });
+
   const getColumnStyle = (status: string) => {
-    switch (status) {
-      case 'todo':
-        return {
-          backgroundColor: '#dbeafe', // blue-100
-          borderColor: '#93c5fd', // blue-300
-        };
-      case 'in-progress':
-        return {
-          backgroundColor: '#fffbeb', // amber-50
-          borderColor: '#fde68a', // amber-200
-        };
-      case 'done':
-        return {
-          backgroundColor: '#ecfdf5', // emerald-50
-          borderColor: '#a7f3d0', // emerald-200
-        };
-      default:
-        return {
-          backgroundColor: '#f9fafb',
-          borderColor: '#e5e7eb',
-        };
+    const baseStyle = {
+      transition: 'all 0.2s ease',
+    };
+
+    const colorStyle = (() => {
+      switch (status) {
+        case 'todo':
+          return {
+            backgroundColor: '#dbeafe', // blue-100
+            borderColor: '#93c5fd', // blue-300
+          };
+        case 'in-progress':
+          return {
+            backgroundColor: '#fffbeb', // amber-50
+            borderColor: '#fde68a', // amber-200
+          };
+        case 'done':
+          return {
+            backgroundColor: '#ecfdf5', // emerald-50
+            borderColor: '#a7f3d0', // emerald-200
+          };
+        default:
+          return {
+            backgroundColor: '#f9fafb',
+            borderColor: '#e5e7eb',
+          };
+      }
+    })();
+
+    // Add visual feedback when hovering during drag
+    if (isOver) {
+      return {
+        ...baseStyle,
+        ...colorStyle,
+        transform: 'scale(1.02)',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+      };
     }
+
+    return {
+      ...baseStyle,
+      ...colorStyle,
+    };
   };
 
   const getHeaderStyle = (status: string) => {
@@ -74,6 +102,7 @@ export function BoardColumn({ column, onAddStory, onEditStory }: BoardColumnProp
 
   return (
     <div 
+      ref={setNodeRef}
       className="rounded-xl p-6 w-80 flex-shrink-0 border-2 shadow-lg"
       style={getColumnStyle(column.status)}
     >
@@ -101,16 +130,25 @@ export function BoardColumn({ column, onAddStory, onEditStory }: BoardColumnProp
         </button>
       </div>
 
-      {/* Stories */}
-      <div className="space-y-4 min-h-[300px]">
-        {column.stories.map((story) => (
-          <StoryCard
-            key={story.id}
-            story={story}
-            onEdit={onEditStory}
-          />
-        ))}
-      </div>
+      {/* Stories with Drag and Drop */}
+      <SortableContext items={column.stories.map(s => s.id)} strategy={verticalListSortingStrategy}>
+        <div className="space-y-4 min-h-[300px]">
+          {column.stories.map((story) => (
+            <DraggableStoryCard
+              key={story.id}
+              story={story}
+              onEdit={onEditStory}
+            />
+          ))}
+          
+          {/* Drop Zone Indicator */}
+          {isOver && column.stories.length === 0 && (
+            <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center text-gray-500">
+              Drop story here
+            </div>
+          )}
+        </div>
+      </SortableContext>
     </div>
   );
 }

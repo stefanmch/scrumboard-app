@@ -35,7 +35,6 @@ export function StoryCard({ story, onEdit }: StoryCardProps) {
     <div
       className="bg-white rounded-xl shadow-md border border-gray-200 p-5 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
       onClick={() => onEdit?.(story)}
-      draggable
     >
       {/* Header with just story points */}
       <div className="flex justify-between items-start mb-3">
