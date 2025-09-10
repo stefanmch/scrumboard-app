@@ -1,14 +1,13 @@
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Column } from '@/types';
-import { StoryCard } from '@/components/story/StoryCard';
+import { Column, Story } from '@/types';
 import { DraggableStoryCard } from './DraggableStoryCard';
 import { Plus } from 'lucide-react';
 
 interface BoardColumnProps {
   column: Column;
   onAddStory?: () => void;
-  onEditStory?: (story: any) => void;
+  onEditStory?: (story: Story) => void;
 }
 
 export function BoardColumn({ column, onAddStory, onEditStory }: BoardColumnProps) {
@@ -124,7 +123,8 @@ export function BoardColumn({ column, onAddStory, onEditStory }: BoardColumnProp
         </div>
         <button
           onClick={onAddStory}
-          className="p-2 text-gray-500 hover:text-gray-700 hover:bg-white hover:bg-opacity-50 rounded-lg transition-all duration-200"
+          className="p-2 text-gray-500 hover:text-gray-700 hover:bg-white hover:bg-opacity-50 rounded-lg transition-all duration-200 flex items-center justify-center"
+          title="Add new story"
         >
           <Plus className="w-5 h-5" />
         </button>

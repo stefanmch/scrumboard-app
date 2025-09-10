@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { ComponentType } from 'react';
 
 // Dynamically import the Board component with no SSR
 const Board = dynamic(() => import('./Board').then(mod => ({ default: mod.Board })), {

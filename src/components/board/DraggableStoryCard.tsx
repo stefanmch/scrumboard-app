@@ -24,7 +24,6 @@ export function DraggableStoryCard({ story, onEdit }: DraggableStoryCardProps) {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
-    cursor: isDragging ? 'grabbing' : 'grab',
   };
 
   return (
@@ -32,11 +31,12 @@ export function DraggableStoryCard({ story, onEdit }: DraggableStoryCardProps) {
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...listeners}
+      className="relative"
     >
       <StoryCard 
         story={story} 
         onEdit={onEdit}
+        dragListeners={listeners}
       />
     </div>
   );
