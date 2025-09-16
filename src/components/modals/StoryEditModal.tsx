@@ -73,8 +73,7 @@ export function StoryEditModal({
   return (
     <ModalPortal>
       <div
-        className="fixed inset-0 z-[10000] flex items-center justify-center"
-        style={{ top: 0, left: 0, width: '100vw', height: '100vh' }}
+        className="fixed inset-0 z-50 flex items-center justify-center"
         onClick={e => {
           if (!ready) return
           if (e.target === e.currentTarget) {
@@ -83,25 +82,12 @@ export function StoryEditModal({
         }}
       >
         {/* Backdrop */}
-        <div 
-          className="absolute inset-0" 
-          style={{ 
-            background: 'rgba(30, 41, 59, 0.6)',
-            backdropFilter: 'blur(4px)'
-          }} 
-        />
+        <div className="absolute inset-0 bg-slate-800/60 backdrop-blur-sm" />
         
         {/* Modal Content */}
-        <div className="relative z-10 w-full flex items-center justify-center min-h-screen p-4">
+        <div className="relative z-10 w-full max-w-2xl mx-4">
           <div
-            className="bg-white rounded-2xl border border-gray-200 w-full max-h-[90vh] overflow-y-auto"
-            style={{ 
-              background: 'white',
-              borderRadius: '16px',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-              maxWidth: '36rem',
-              border: '1px solid #e5e7eb'
-            }}
+            className="bg-white rounded-2xl shadow-2xl border border-gray-200 max-h-[90vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
